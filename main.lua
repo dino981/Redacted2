@@ -62,6 +62,77 @@ local function pickUp(path)
 
     replicatedStorage.LootSystem.RemoteEvents.PickUpRequest:FireServer(unpack(pickUpArgs))
 end
+
+local function createEsp(target)
+    local char, displayName
+    if target:IsA("Player") then
+        char = target.Character
+        displayName = target.DisplayName .. " (@" .. target.Name .. ")"
+    elseif target:IsA("Model") then
+        char = target
+        local targetPlr = players:GetPlayerFromCharacter(target)
+        displayName = targetPlr and (targetPlr.DisplayName .. " (@" .. targetPlr.Name .. ")") or target.Name
+    end
+
+    if not char then return end
+
+    local head = char:FindFirstChild("Head") or char:WaitForChild("Head", 2)
+    if not head then return end
+
+    if not char:FindFirstChild("DecayEspHighlight") then
+        local espHighlight = Instance.new("Highlight")
+        espHighlight.Name = "DecayEspHighlight"
+        espHighlight.FillTransparency = 0.3
+        espHighlight.OutlineTransparency = 0
+        espHighlight.OutlineColor = Color3.fromRGB(0, 255, 0)
+        espHighlight.Adornee = char
+        espHighlight.Parent = char
+    end
+
+    if not head:FindFirstChild("DecayEspTag") then
+        local espBillboard = Instance.new("BillboardGui")
+        espBillboard.Name = "DecayEspTag"
+        espBillboard.AlwaysOnTop = true
+        espBillboard.MaxDistance = math.huge
+        espBillboard.Size = UDim2.new(0, 150, 0, 30)
+        espBillboard.StudsOffset = Vector3.new(0, 2.5, 0)
+        espBillboard.Adornee = head
+
+        local espNameTag = Instance.new("TextLabel")
+        espNameTag.BackgroundTransparency = 1
+        espNameTag.Size = UDim2.new(1, 0, 1, 0)
+        espNameTag.Position = UDim2.new(0, 0, 0, 0)
+        espNameTag.TextTransparency = 0
+        espNameTag.ZIndex = 10
+        espNameTag.Font = Enum.Font.SourceSansBold
+        espNameTag.TextSize = 14
+        espNameTag.Text = displayName
+        espNameTag.TextColor3 = Color3.fromRGB(255, 255, 255)
+        espNameTag.TextStrokeTransparency = 0
+        espNameTag.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        espNameTag.Parent = espBillboard
+
+        espBillboard.Parent = head
+    end
+end
+
+local function deleteEsp(target)
+    local char = target:IsA("Player") and target.Character or target
+    if not char then return end
+
+    local highlight = char:FindFirstChild("DecayEspHighlight")
+    if highlight then
+        highlight:Destroy()
+    end
+
+    local head = char:FindFirstChild("Head")
+    if head then
+        local billboard = head:FindFirstChild("DecayEspTag")
+        if billboard then
+            billboard:Destroy()
+        end
+    end
+end
 --> FUNCTIONS <--
 
 -- 144803933568 Main Game
@@ -229,49 +300,33 @@ EspTab:CreateToggle({
     Callback = function(Value)
         playerEspActive = Value
         if playerEspActive == true then 
-            for _, otherPlayers in pairs(players:GetPlayers()) do
-                if otherPlayers.Character and player.Name ~= otherPlayers.Name then 
-                    if not otherPlayers:FindFirstChildWhichIsA("Highlight") then 
-                        local espHighlight = Instance.new("Highlight")
-                        espHighlight.FillTransparency = 0.3
-                        espHighlight.OutlineTransparency = 0
-                        espHighlight.OutlineColor = Color3.fromRGB(0, 1, 0)
-                        espHighlight.Adornee = otherPlayers.Character
-                        espHighlight.Parent = otherPlayers.Character
-                    end
+            for _, otherPlayer in ipairs(players:GetPlayers()) do
+                if otherPlayer ~= player then 
+                    createEsp(otherPlayer)
                 end
             end
         elseif playerEspActive == false then 
-            for _, otherPlayers in pairs(players:GetPlayers()) do 
-                if otherPlayers.Character and otherPlayers.Character:FindFirstChildWhichIsA("Highlight") then 
-                    othersPlayer.Character:FindFirstChildWhichIsA("Highlight"):Destroy()
-                end
+            for _, otherPlayer in ipairs(players:GetPlayers()) do
+                if otherPlayer ~= player then
+                deleteEsp(otherPlayer)
             end
         end
-    end
+    end,
 })
 
 local function onRespawn()
     character = player.Character
     hrp = character:WaitForChild("HumanoidRootPart")
-    humanoid = character.Humanoid
+    humanoid = character:WaitForChild("Humanoid")
 end
 
 player.CharacterAdded:Connect(onRespawn)
 
 players.PlayerAdded:Connect(function(newPlayer)
     newPlayer.CharacterAdded:Connect(function(char)
-        if playerEspActive then 
-            if not char:FindFirstChildWhichIsA("Highlight") then 
-                if player.Name ~= char.Name then 
-                    local espHighlight = Instance.new("Highlight")
-                    espHighlight.FillTransparency = 0.3
-                    espHighlight.OutlineTransparency = 0
-                    espHighlight.OutlineColor = Color3.fromRGB(0, 1, 0)
-                    espHighlight.Adornee = char
-                    espHighlight.Parent = char
-                end
-            end
+        if playerEspActive and newPlayer ~= player then
+            task.wait(0.5)
+            createEsp(char)
         end
     end)
 end)
