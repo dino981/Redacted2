@@ -103,14 +103,14 @@ PlayerTab:CreateSlider {
     end,
 }
 
-PlayerTab:CreateToggle {
+PlayerTab:CreateToggle({
     Name = "Toggle Ghost View",
     CurrentValue = false,
     Callback = function(Value)
         ghostViewActive = Value
         if ghostViewActive == true then 
             ghostPart = Instance.new("Part")
-            ghostPart.Size = Vector3.new(1,1,1)
+            ghostPart.Size = Vector3.new(1, 1, 1)
             ghostPart.Transparency = 1
             ghostPart.CanCollide = false
             ghostPart.Position = hrp.Position
@@ -128,7 +128,11 @@ PlayerTab:CreateToggle {
             bg.Parent = ghostPart
 
             ghostViewConnection = runService.RenderStepped:Connect(function()
-                local cm = require(player.PlayerScripts:WaitForChild("PlayerModule"):WaitForChild("ControlModule"))
+                local playerScripts = player:FindFirstChild("PlayerScripts")
+                local playerModule = playerScripts and playerScripts:FindFirstChild("PlayerModule")
+                if not playerModule then return end
+
+                local cm = require(playerModule:WaitForChild("ControlModule"))
                 if not cm or not camera then return end
 
                 local move = cm:GetMoveVector()
@@ -138,7 +142,7 @@ PlayerTab:CreateToggle {
                 bv.Velocity = vel
                 bg.CFrame = camera.CFrame
             end)
-        elseif ghostViewActive == false then 
+        else
             if ghostViewConnection then 
                 ghostViewConnection:Disconnect()
                 ghostViewConnection = nil
@@ -158,10 +162,9 @@ PlayerTab:CreateToggle {
                 bg:Destroy()
                 bg = nil
             end
-
         end
     end
-}
+})
 
 
 
