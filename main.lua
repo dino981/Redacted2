@@ -2,7 +2,7 @@
 local workspace = game:GetService("Workspace")
 local players = game:GetService("Players")
 local runService = game:GetService("RunService")
-local replicatedStorage = game:getService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 --> SERVICES <--
 
 --> GLOBAL VARIABLES <--
@@ -48,7 +48,7 @@ end
 
 local function swingTool()
     local swingArgs = {
-        [1] = Vector3.new(camera.CFrame.LookVector)
+        [1] = camera.CFrame.LookVector,
         [2] = camera:FindFirstChild("Viewmodel"):FindFirstChildWhichIsA("Model").Name or "Rock"
     }
 
@@ -231,7 +231,7 @@ EspTab:CreateToggle({
         if playerEspActive == true then 
             for _, otherPlayers in pairs(players:GetPlayers()) do
                 if otherPlayers.Character and player.Name ~= otherPlayers.Name then 
-                    if not othersPlayers:FindFirstChildWhichIsA("Highlight") then 
+                    if not otherPlayers:FindFirstChildWhichIsA("Highlight") then 
                         local espHighlight = Instance.new("Highlight")
                         espHighlight.FillTransparency = 0.3
                         espHighlight.OutlineTransparency = 0
@@ -244,7 +244,7 @@ EspTab:CreateToggle({
         elseif playerEspActive == false then 
             for _, otherPlayers in pairs(players:GetPlayers()) do 
                 if otherPlayers.Character and otherPlayers.Character:FindFirstChildWhichIsA("Highlight") then 
-                    othersPlayers.Character:FindFirstChildWhichIsA("Highlight"):Destroy()
+                    othersPlayer.Character:FindFirstChildWhichIsA("Highlight"):Destroy()
                 end
             end
         end
