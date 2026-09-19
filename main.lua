@@ -8,6 +8,7 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 --> GLOBAL VARIABLES <--
 local player = players.LocalPlayer
 local camera = workspace.Camera
+local mouse = player:GetMouse()
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character.Humanoid
 local hrp = character.HumanoidRootPart
@@ -331,3 +332,8 @@ players.PlayerAdded:Connect(function(newPlayer)
         end
     end)
 end)
+
+while true do 
+    print(mouse.Target)
+    wait(2)
+end
