@@ -309,6 +309,7 @@ EspTab:CreateToggle({
             for _, otherPlayer in ipairs(players:GetPlayers()) do
                 if otherPlayer ~= player then
                 deleteEsp(otherPlayer)
+                end
             end
         end
     end,
