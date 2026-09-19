@@ -117,6 +117,7 @@ PlayerTab:CreateToggle({
             ghostPart.Parent = workspace
 
             camera.CameraSubject = ghostPart
+            hrp.Anchored = true
 
             bv = Instance.new("BodyVelocity")
             bv.MaxForce = Vector3.new(9e9, 9e9, 9e9)
@@ -149,6 +150,7 @@ PlayerTab:CreateToggle({
             end
 
             camera.CameraSubject = humanoid
+            hrp.Anchored = false
 
             if ghostPart then 
                 ghostPart:Destroy()
