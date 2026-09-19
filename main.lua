@@ -29,7 +29,7 @@ local Window = Rayfield:CreateWindow({
 
 local HomeTab = Window:CreateTab("Home", "home")
 HomeTab:CreateLabel("Welcome, " .. player.Name)
-Home:CreateSection("Home Section")
+HomeTab:CreateSection("Home Section")
 HomeTab:CreateLabel("Display Name: " .. player.DisplayName)
 HomeTab:CreateLabel("Username: " .. player.Name)
 HomeTab:CreateLabel("User ID: " .. player.UserId)
