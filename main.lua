@@ -85,7 +85,9 @@ local function createEsp(target)
         espHighlight.Name = "DecayEspHighlight"
         espHighlight.FillTransparency = 0.3
         espHighlight.OutlineTransparency = 0
+        espHighlight.FillColor = Color3.fromRGB(0, 255, 0)
         espHighlight.OutlineColor = Color3.fromRGB(0, 255, 0)
+        
         espHighlight.Adornee = char
         espHighlight.Parent = char
     end
@@ -132,6 +134,21 @@ local function deleteEsp(target)
         if billboard then
             billboard:Destroy()
         end
+    end
+end
+
+local function setupPlayer(targetPlayer)
+    if targetPlayer == player then return end
+
+    targetPlayer.CharacterAdded:Connect(function(char)
+        if playerEspActive then
+            task.wait(0.5)
+            createEsp(char)
+        end
+    end)
+
+    if playerEspActive and targetPlayer.Character then
+        createEsp(targetPlayer)
     end
 end
 --> FUNCTIONS <--
@@ -300,21 +317,21 @@ EspTab:CreateToggle({
     CurrentValue = false,
     Callback = function(Value)
         playerEspActive = Value
-        if playerEspActive == true then 
-            for _, otherPlayer in ipairs(players:GetPlayers()) do
-                if otherPlayer ~= player then 
+        for _, otherPlayer in ipairs(players:GetPlayers()) do
+            if otherPlayer ~= player then 
+                if playerEspActive then 
                     createEsp(otherPlayer)
-                end
-            end
-        elseif playerEspActive == false then 
-            for _, otherPlayer in ipairs(players:GetPlayers()) do
-                if otherPlayer ~= player then
-                deleteEsp(otherPlayer)
+                else 
+                    deleteEsp(otherPlayer)
                 end
             end
         end
-    end,
+    end
 })
+
+for _, otherPlayer in ipairs(players:GetPlayers()) do
+    setupPlayer(otherPlayer)
+end
 
 local function onRespawn()
     character = player.Character
@@ -333,7 +350,4 @@ players.PlayerAdded:Connect(function(newPlayer)
     end)
 end)
 
-while true do 
-    print(mouse.Target)
-    wait(2)
-end
+players.PlayerAdded:Connect(setupPlayer)
