@@ -105,7 +105,8 @@ PlayerTab:CreateSlider {
 
 PlayerTab:CreateToggle {
     Name = "Toggle Ghost View",
-    CurrentValue = function(Value)
+    CurrentValue = false,
+    Callback = function(Value)
         ghostViewActive = Value
         if ghostViewActive == true then 
             ghostPart = Instance.new("Part")
