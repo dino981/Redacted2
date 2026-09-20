@@ -22,6 +22,8 @@ local ghostViewConnection
 local ghostViewActive = false
 local respawnDelay = 120
 local playerEspActive = false
+local crateEspActive = false
+local militaryCrateEspActive = false
 --> LOCAL VARIABLES <--
 
 --> FUNCTIONS <--
@@ -393,6 +395,32 @@ EspTab:CreateToggle({
             for _, crate in ipairs(workspace.LootSpawns:GetDescendants()) do 
                 if crate.Name == "Crate" and crate:IsA("Model") then 
                     deleteObjectEsp(crate)
+                end
+            end
+        end
+    end,
+})
+
+EspTab:CreateToggle({
+    Name = "Military Crate Esp",
+    CurrentValue = false,
+    Callback = function(Value)
+        militaryCrateEspActive = Value
+        if militaryCrateEspActive then 
+            militaryCrateEspThread = task.spawn(function()
+                while militaryCrateEspActive do 
+                    for _, militaryCrate in ipairs(workspace.LootSpawns:GetDescendants()) do 
+                        if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then 
+                            createObjectEsp(militaryCrate)
+                        end
+                    end
+                    task.wait(1)
+                end
+            end)
+        elseif militaryCrateEspActive == false then 
+            for _, militaryCrate in ipairs(workspace.LootSpawns:GetDescendants()) do 
+                if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then 
+                    deleteObjectEsp(militaryCrate)
                 end
             end
         end
