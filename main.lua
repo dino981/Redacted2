@@ -180,7 +180,7 @@ local function createObjectEsp(target)
 end
 
 local function deleteObjectEsp(target)
-    if target:FindFirstChild("Hitbox") and target:FindFirstChild("Hitbox"):FindFirstChild("DecayEspTag") then 
+    if target:FindFirstChild("Hitbox") and target.Hitbox:FindFirstChild("DecayEspTag") then 
         target.Hitbox.DecayEspTag:Destroy()
     end
 end
@@ -375,7 +375,7 @@ EspTab:CreateToggle({
     end,
 })
 
---[[EspTab:CreateToggle({
+EspTab:CreateToggle({
     Name = "Crate Esp",
     CurrentValue = false,
     Callback = function(Value)
@@ -432,7 +432,7 @@ EspTab:CreateToggle({
             end
         end
     end,
-})]]
+})
 
 for _, otherPlayer in ipairs(players:GetPlayers()) do
     setupPlayer(otherPlayer)
