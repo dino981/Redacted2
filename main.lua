@@ -226,7 +226,7 @@ HomeTab:CreateLabel("Display Name: " .. player.DisplayName)
 HomeTab:CreateLabel("Username: " .. player.Name)
 HomeTab:CreateLabel("User ID: " .. player.UserId)
 HomeTab:CreateLabel("Executor: " .. identifyexecutor() .. " " .. version())
-HomeTab:CreateLabel(formatPlaytime(player.playTime))
+HomeTab:CreateLabel(formatPlaytime(player.PlayTime))
 
 local PlayerTab = Window:CreateTab("Player", "circle-user")
 PlayerTab:CreateSection("LocalPlayer")
