@@ -151,6 +151,37 @@ local function setupPlayer(targetPlayer)
         createEsp(targetPlayer)
     end
 end
+
+local function createObjectEsp(target)
+    local espBillboard = Instance.new("BillboardGui")
+    espBillboard.Name = "DecayEspTag"
+    espBillboard.AlwaysOnTop = true
+    espBillboard.MaxDistance = math.huge
+    espBillboard.Size = UDim2.new(0, 150, 0, 30)
+    espBillboard.StudsOffset = Vector3.new(0, 2.5, 0)
+    espBillboard.Adornee = target:FindFirstChild("Hitbox")
+    espBillboard.Parent = target:FindFirstChild("Hitbox")
+
+    local espNameTag = Instance.new("TextLabel")
+    espNameTag.BackgroundTransparency = 1
+    espNameTag.Size = UDim2.new(1, 0, 1, 0)
+    espNameTag.Position = UDim2.new(0, 0, 0, 0)
+    espNameTag.TextTransparency = 0
+    espNameTag.ZIndex = 10
+    espNameTag.Font = Enum.Font.SourceSansBold
+    espNameTag.TextSize = 14
+    espNameTag.Text = target.Name
+    espNameTag.TextColor3 = Color3.fromRGB(255, 0, 0)
+    espNameTag.TextStrokeTransparency = 0
+    espNameTag.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    espNameTag.Parent = espBillboard
+end
+
+local function deleteObjectEsp(target)
+    if target:FindFirstChild("Hitbox") and target:FindFirstChild("Hitbox"):FindFirstChild("DecayEspTag") then 
+        target.Hitbox.DecayEspTag:Destroy()
+    end
+end
 --> FUNCTIONS <--
 
 -- 144803933568 Main Game
@@ -313,13 +344,13 @@ PlayerTab:CreateToggle({
 local EspTab = Window:CreateTab("Esp", "glasses")
 
 EspTab:CreateToggle({
-    Name = "Toggle Player Esp",
+    Name = "Player Esp",
     CurrentValue = false,
     Callback = function(Value)
         playerEspActive = Value
 
         if playerEspActive then
-            espThread = task.spawn(function()
+            playerEspThread = task.spawn(function()
                 while playerEspActive do
                     for _, otherPlayer in ipairs(players:GetPlayers()) do
                         if otherPlayer ~= player and otherPlayer.Character then
@@ -329,14 +360,39 @@ EspTab:CreateToggle({
                             end
                         end
                     end
-                    task.wait(2)
+                    task.wait(1)
                 end
             end)
-        else
-            -- Clean up ESP when toggled off
+        elseif playerEspActive == false then
             for _, otherPlayer in ipairs(players:GetPlayers()) do
                 if otherPlayer ~= player then
                     deleteEsp(otherPlayer)
+                end
+            end
+        end
+    end,
+})
+
+EspTab:CreateToggle({
+    Name = "Crate Esp",
+    CurrentValue = false,
+    Callback = function(Value)
+        crateEspActive = Value
+        if crateEspActive then 
+            crateEspThread = task.spawn(function()
+                while crateEspActive do 
+                    for _, crate in ipairs(workspace.LootSpawns:GetDescendants()) do 
+                        if crate.Name == "Crate" and crate:IsA("Model") then 
+                            createObjectEsp(crate)
+                        end
+                    end
+                    task.wait(1)
+                end
+            end)
+        elseif crateEspActive == false then 
+            for _, crate in ipairs(workspace.LootSpawns:GetDescendants()) do 
+                if crate.Name == "Crate" and crate:IsA("Model") then 
+                    deleteObjectEsp(crate)
                 end
             end
         end
