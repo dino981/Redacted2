@@ -28,6 +28,16 @@ local airdropEspActive = false
 --> LOCAL VARIABLES <--
 
 --> FUNCTIONS <--
+local function formatPlaytime(playtime)
+    if playtime > 60 then 
+        return "Play Time: " .. playTime .. " seconds"
+    elseif playTime <= 60 then 
+        return "Play Time: " .. math.floor((playTime/60) * 10) / 10 .. " minutes"
+    elseif playtime <= 3600 then 
+        return "Play Time: " .. math.floor((playTime/3600) * 10) / 10 .. " hour/s"
+    end
+end
+
 local function moveItemFromStorage(destinationPath, originPath)
     local moveArgs = {
         [1] = destinationPath,
@@ -216,6 +226,7 @@ HomeTab:CreateLabel("Display Name: " .. player.DisplayName)
 HomeTab:CreateLabel("Username: " .. player.Name)
 HomeTab:CreateLabel("User ID: " .. player.UserId)
 HomeTab:CreateLabel("Executor: " .. identifyexecutor() .. " " .. version())
+HomeTab:CreateLabel(formatPlaytime(player.playTime))
 
 local PlayerTab = Window:CreateTab("Player", "circle-user")
 PlayerTab:CreateSection("LocalPlayer")
