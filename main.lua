@@ -215,7 +215,7 @@ HomeTab:CreateSection("Home")
 HomeTab:CreateLabel("Display Name: " .. player.DisplayName)
 HomeTab:CreateLabel("Username: " .. player.Name)
 HomeTab:CreateLabel("User ID: " .. player.UserId)
-HomeTab:CreateLabel("Executor: " .. identifyexecutor() .. " " .. version())
+HomeTab:CreateLabel("Executor: " .. identifyexecutor() .. " " .. version()  or "Unknown")
 
 local PlayerTab = Window:CreateTab("Player", "circle-user")
 PlayerTab:CreateSection("LocalPlayer")
