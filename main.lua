@@ -22,6 +22,9 @@ local ghostViewConnection
 local ghostViewActive = false
 local respawnDelay = 120
 local targetPlayer
+local viewPart
+local viewingActive = false
+local viewingConnection
 local playerEspActive = false
 local crateEspActive = false
 local militaryCrateEspActive = false
@@ -372,7 +375,7 @@ TargetTab:CreateInput({
    RemoveTextAfterFocusLost = true,
    Callback = function(Text)
       if Text and Text ~= "" then
-         for _, v in pairs(playersService:GetPlayers()) do
+         for _, v in pairs(players:GetPlayers()) do
             if (string.sub(string.lower(v.Name), 1, string.len(Text)) == string.lower(Text)) or
                 (string.sub(string.lower(v.DisplayName), 1, string.len(Text)) == string.lower(Text)) then
                TargetPlayer = v
@@ -393,13 +396,38 @@ TargetTab:CreateToggle({
     Name = "View",
     CurrentValue = false,
     Callback = function(Value)
-        if Value == true then 
-            if TargetPlayer and TargetPlayer.Character and targetPlayer.Character.HumanoidRootPart then 
-                camera.CameraSubject = TargetPlayer.Character.HumanoidRootPart
+        viewingActive = Value
+
+        if viewingActive == true then 
+            if TargetPlayer and TargetPlayer.Character and TargetPlayer.Character:FindFirstChild("HumanoidRootPart") then 
+                viewPart = Instance.new("Part")
+                viewPart.Size = Vector3.new(1, 1, 1)
+                viewPart.Transparency = 1
+                viewPart.CanCollide = false
+                viewPart.Anchored = true
+                viewPart.Position = TargetPlayer.Character.HumanoidRootPart.Position + Vector3.new(2, 2, 0)
+                viewPart.Parent = workspace
+
+                camera.CameraSubject = viewPart
+
+                viewingConnection = runService.RenderStepped:Connect(function()
+                    if not viewingActive or not viewPart then return end
+                    if TargetPlayer and TargetPlayer.Character and TargetPlayer.Character:FindFirstChild("HumanoidRootPart") then 
+                        viewPart.Position = TargetPlayer.Character.HumanoidRootPart.Position + Vector3.new(2, 2, 0)
+                    end
+                end)
             end
-        elseif Value == false then 
+        elseif viewingActive == false then
+            if viewingConnection then 
+                viewingConnection:Disconnect()
+                viewingConnection = nil
+            end
             if player and character and humanoid then 
                 camera.CameraSubject = humanoid
+            end
+            if viewPart then
+                viewPart:Destroy()
+                viewPart = nil
             end
         end
     end,
@@ -544,17 +572,3 @@ local function onRespawn()
 end
 
 player.CharacterAdded:Connect(onRespawn)
-
--- Retrieve all connections tied to the CameraMode change signal
-local connections = getconnections(game.Players.LocalPlayer:GetPropertyChangedSignal("CameraMode"))
-
-for _, connection in ipairs(connections) do
-    if connection.Disable then
-        connection:Disable() -- Disables the connection from firing
-    elseif connection.Disconnect then
-        connection:Disconnect() -- Remotely disconnects the event
-    end
-end
-
--- Manually restore classic camera mode once the listener is dead
-game.Players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
