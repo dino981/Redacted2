@@ -230,7 +230,7 @@ local playTimeLabel = HomeTab:CreateLabel(formatPlaytime(tonumber(player.PlayTim
 
 task.spawn(function()
     while true do 
-        playTimeLabel:Set(formatPlayTime(tonumber(player.PlayTime.Value)))
+        playTimeLabel:Set(formatPlaytime(tonumber(player.PlayTime.Value)))
         task.wait(5)
     end
 end)
