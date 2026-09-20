@@ -317,20 +317,20 @@ EspTab:CreateToggle({
     CurrentValue = false,
     Callback = function(Value)
         playerEspActive = Value
-        for _, otherPlayer in ipairs(players:GetPlayers()) do
-            if otherPlayer ~= player then
-                if playerEspActive then
+        if playerEspActive == true then
+            for _, otherPlayer in ipairs(players:GetPlayers()) do
+                if otherPlayer ~= player then
                     while playerEspActive do
                     deleteEsp(otherPlayer)
                     createEsp(otherPlayer)
                     wait(5)
                     end
-                else 
-                    deleteEsp(otherPlayer)
                 end
             end
+        elseif playerEspActive == true then 
+            deleteEsp(otherPlayer)
         end
-    end
+    end,
 })
 
 for _, otherPlayer in ipairs(players:GetPlayers()) do
