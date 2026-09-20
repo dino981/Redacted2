@@ -15,6 +15,7 @@ local hrp = character.HumanoidRootPart
 --> GLOBAL VARIABLES <--
 
 --> LOCAL VARIABLES <--
+local silentFootstepsActive = false
 local bv, bg
 local ghostPart
 local ghostViewSpeed = 1
@@ -78,6 +79,14 @@ local function pickUp(path)
     }
 
     replicatedStorage.LootSystem.RemoteEvents.PickUpRequest:FireServer(unpack(pickUpArgs))
+end
+
+local function crouch(bool)
+    local crouchArgs = {
+        [1] = bool
+    }
+
+    replicatedStorage.Players.Crouch:FireServer(unpack(crouchArgs))
 end
 
 local function createEsp(target)
@@ -283,6 +292,25 @@ PlayerTab:CreateButton {
         JumpSlider:Set(38)
     end,
 }
+
+PlayerTab:CreateToggle {
+    Name = "Silent Footsteps",
+    CurrentValue = false,
+    Callback = function(Value)
+        silentFootstepsActive = Value
+        if VasilentFootstepsActivelue == true then
+            crouch(true)
+        elseif silentFootstepsActive == false then 
+            crouch(false)
+        end
+    end
+}
+
+player.IsCrouching:GetPropertyChangedSignal("Value"):Connect(function()
+    if player.IsCrouching.Value == false and silentFootstepsActive == true then 
+         crouch(true)
+    end
+end)
 
 PlayerTab:CreateSlider {
     Name = "Ghost View Speed",
