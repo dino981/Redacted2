@@ -29,11 +29,11 @@ local airdropEspActive = false
 
 --> FUNCTIONS <--
 local function formatPlaytime(playtime)
-    if playtime > 60 then 
+    if playtime < 60 then 
         return "Play Time: " .. playtime .. " seconds"
-    elseif playtime <= 60 then 
+    elseif playtime >= 60 then 
         return "Play Time: " .. math.floor((playtime/60) * 10) / 10 .. " minutes"
-    elseif playtime <= 3600 then 
+    elseif playtime >= 3600 then 
         return "Play Time: " .. math.floor((playtime/3600) * 10) / 10 .. " hour/s"
     end
 end
@@ -231,7 +231,7 @@ local playTimeLabel = HomeTab:CreateLabel(formatPlaytime(tonumber(player.PlayTim
 task.spawn(function()
     while true do 
         playTimeLabel:Set(formatPlayTime(tonumber(player.PlayTime.Value)))
-        task.wait(10)
+        task.wait(5)
     end
 end)
 
