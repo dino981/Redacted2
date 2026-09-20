@@ -21,7 +21,7 @@ local ghostViewSpeed = 1
 local ghostViewConnection
 local ghostViewActive = false
 local respawnDelay = 120
-local targetPlayer
+local TargetPlayer
 local viewPart
 local viewingActive = false
 local viewingConnection
