@@ -417,7 +417,7 @@ EspTab:CreateToggle({
                     for _, militaryCrate in ipairs(workspace.LootSpawns:GetDescendants()) do 
                         if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then
                             local militaryCrateHitbox = militaryCrate:FindFirstChild("Hitbox") 
-                            if not militaryCrateHitbox:FindFirstChild("DecayEspTag") then
+                            if militaryCrateHitbox and not militaryCrateHitbox:FindFirstChild("DecayEspTag") then
                             createObjectEsp(militaryCrate)
                             end
                         end
@@ -429,7 +429,7 @@ EspTab:CreateToggle({
             for _, militaryCrate in ipairs(workspace.LootSpawns:GetDescendants()) do 
                 if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then
                     local militaryCrateHitbox = militaryCrate:FindFirstChild("Hitbox")
-                    if militaryCrateHitbox:FindFirstChild("DecayEspTag") then 
+                    if militaryCrateHitbox and militaryCrateHitbox:FindFirstChild("DecayEspTag") then 
                     deleteObjectEsp(militaryCrate)
                     end
                 end
