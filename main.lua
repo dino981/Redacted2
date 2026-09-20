@@ -24,6 +24,7 @@ local respawnDelay = 120
 local playerEspActive = false
 local crateEspActive = false
 local militaryCrateEspActive = false
+local airdropEspActive = false
 --> LOCAL VARIABLES <--
 
 --> FUNCTIONS <--
@@ -433,6 +434,38 @@ EspTab:CreateToggle({
                     deleteObjectEsp(militaryCrate)
                     end
                 end
+            end
+        end
+    end,
+})
+
+EspTab:CreateToggle({
+    Name = "Airdrop Esp",
+    CurrentValue = false,
+    Callback = function(Value)
+        airdropEspActive = Value
+        if airdropEspActive == true then 
+            airdropEspThread = task.spawn(function()
+                while airdropEspActive do
+                    local airdrop = workspace:FindFirstChild("Supply Drop")
+                    local airdropHitbox
+                    if airdrop then
+                    airdropHitbox = airdrop:FindFirstChild("Hitbox")
+                        if airdropHitbox and not airdropHitbox:FindFirstChild("DecayEspTag") then
+                        createObjectEsp(airdrop)
+                        end
+                    end
+                    task.wait(1)
+                end
+            end)
+        elseif airdropEspActive == false then 
+            local airdrop = workspace:FindFirstChild("Supply Drop")
+            local airdropHitbox
+            if airdrop then 
+                airdropHitbox = airdrop:FindFirstChild("Hitbox")
+            end
+            if airdrop and airdropHitbox and airdropHitbox:FindFirstChild("DecayEspTag") then 
+                deleteObjectEsp(airdrop)
             end
         end
     end,
