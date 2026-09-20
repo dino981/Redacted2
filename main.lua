@@ -303,7 +303,7 @@ PlayerTab:CreateToggle {
         elseif silentFootstepsActive == false then 
             crouch(false)
         end
-    end
+    end,
 }
 
 player.IsCrouching:GetPropertyChangedSignal("Value"):Connect(function()
