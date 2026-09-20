@@ -21,6 +21,7 @@ local ghostViewSpeed = 1
 local ghostViewConnection
 local ghostViewActive = false
 local respawnDelay = 120
+local targetPlayer
 local playerEspActive = false
 local crateEspActive = false
 local militaryCrateEspActive = false
@@ -362,6 +363,48 @@ PlayerTab:CreateToggle({
     end
 })
 
+local TargetTab = Window:CreateTab("Target", "crosshair")
+
+TargetTab:CreateInput({
+   Name = "Target Input",
+   CurrentValue = "",
+   PlaceholderText = "Input Target",
+   RemoveTextAfterFocusLost = true,
+   Callback = function(Text)
+      if Text and Text ~= "" then
+         for _, v in pairs(playersService:GetPlayers()) do
+            if (string.sub(string.lower(v.Name), 1, string.len(Text)) == string.lower(Text)) or
+                (string.sub(string.lower(v.DisplayName), 1, string.len(Text)) == string.lower(Text)) then
+               TargetPlayer = v
+               Rayfield:Notify {
+                  Title = "Target Set",
+                  Content = "Target Set To: " .. v.Name,
+                  Duration = 5,
+                  Image = "contact"
+               }
+               break
+            end
+         end
+      end
+   end,
+})
+
+TargetTab:CreateToggle({
+    Name = "View",
+    CurrentValue = false,
+    Callback = function(Value)
+        if Value == true then 
+            if TargetPlayer and TargetPlayer.Character and targetPlayer.Character.HumanoidRootPart then 
+                camera.CameraSubject = TargetPlayer.Character.HumanoidRootPart
+            end
+        elseif Value == false then 
+            if player and character and humanoid then 
+                camera.CameraSubject = humanoid
+            end
+        end
+    end,
+})
+
 local EspTab = Window:CreateTab("Esp", "glasses")
 
 EspTab:CreateToggle({
@@ -501,3 +544,17 @@ local function onRespawn()
 end
 
 player.CharacterAdded:Connect(onRespawn)
+
+-- Retrieve all connections tied to the CameraMode change signal
+local connections = getconnections(game.Players.LocalPlayer:GetPropertyChangedSignal("CameraMode"))
+
+for _, connection in ipairs(connections) do
+    if connection.Disable then
+        connection:Disable() -- Disables the connection from firing
+    elseif connection.Disconnect then
+        connection:Disconnect() -- Remotely disconnects the event
+    end
+end
+
+-- Manually restore classic camera mode once the listener is dead
+game.Players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
