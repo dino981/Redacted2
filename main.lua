@@ -226,12 +226,14 @@ HomeTab:CreateLabel("Display Name: " .. player.DisplayName)
 HomeTab:CreateLabel("Username: " .. player.Name)
 HomeTab:CreateLabel("User ID: " .. player.UserId)
 HomeTab:CreateLabel("Executor: " .. identifyexecutor() .. " " .. version())
-local playTimeLabel = HomeTab:CreateLabel(formatPlaytime(toNumber(player.PlayTime.Value)))
+local playTimeLabel = HomeTab:CreateLabel(formatPlaytime(tonumber(player.PlayTime.Value)))
 
-while true do 
-    playTimeLabel:Set(formatPlayTime(toNumber(player.PlayTime.Value)))
-    task.wait(10)
-end
+task.spawn(function()
+    while true do 
+        playTimeLabel:Set(formatPlayTime(tonumber(player.PlayTime.Value)))
+        task.wait(10)
+    end
+end)
 
 local PlayerTab = Window:CreateTab("Player", "circle-user")
 PlayerTab:CreateSection("LocalPlayer")
