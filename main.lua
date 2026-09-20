@@ -229,8 +229,9 @@ HomeTab:CreateLabel("Executor: " .. identifyexecutor() .. " " .. version())
 local playTimeLabel = HomeTab:CreateLabel(formatPlaytime(tonumber(player.PlayTime.Value)))
 
 task.spawn(function()
-    while true do 
-        playTimeLabel:Set(formatPlaytime(tonumber(player.PlayTime.Value)))
+    while true do
+        local time = tostring(formatPlaytime(tonumber(player.PlayTime.Value)))
+        playTimeLabel:Set(time)
         task.wait(5)
     end
 end)
