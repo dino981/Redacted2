@@ -298,7 +298,7 @@ PlayerTab:CreateToggle {
     CurrentValue = false,
     Callback = function(Value)
         silentFootstepsActive = Value
-        if silentFootstepsActivelue == true then
+        if silentFootstepsActive == true then
             crouch(true)
         elseif silentFootstepsActive == false then 
             crouch(false)
