@@ -405,7 +405,7 @@ TargetTab:CreateToggle({
                 viewPart.Transparency = 1
                 viewPart.CanCollide = false
                 viewPart.Anchored = true
-                viewPart.Position = TargetPlayer.Character.HumanoidRootPart.Position + Vector3.new(2, 2, 0)
+                viewPart.Position = (TargetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 2, 2)).Position
                 viewPart.Parent = workspace
 
                 camera.CameraSubject = viewPart
@@ -413,7 +413,7 @@ TargetTab:CreateToggle({
                 viewingConnection = runService.RenderStepped:Connect(function()
                     if not viewingActive or not viewPart then return end
                     if TargetPlayer and TargetPlayer.Character and TargetPlayer.Character:FindFirstChild("HumanoidRootPart") then 
-                        viewPart.Position = TargetPlayer.Character.HumanoidRootPart.Position + Vector3.new(2, 2, 0)
+                        viewPart.Position = (TargetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 2, 2)).Position
                     end
                 end)
             end
