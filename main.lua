@@ -45,9 +45,8 @@ local function moveItemIntoStorage(originPath, destinationPath)
     replicatedStorage.Inventory.StorageRemoteEvents.QuickMoveToStorage:FireServer(unpack(moveArgs))
 end
 
-local function spawnAtBag(targetBag)
-    
-end
+--local function spawnAtBag(targetBag)
+--end
 
 local function swingTool()
     local swingArgs = {
