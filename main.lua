@@ -406,7 +406,7 @@ EspTab:CreateToggle({
     end,
 })
 
---[[EspTab:CreateToggle({
+EspTab:CreateToggle({
     Name = "Military Crate Esp",
     CurrentValue = false,
     Callback = function(Value)
@@ -415,8 +415,9 @@ EspTab:CreateToggle({
             militaryCrateEspThread = task.spawn(function()
                 while militaryCrateEspActive do 
                     for _, militaryCrate in ipairs(workspace.LootSpawns:GetDescendants()) do 
-                        if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then  
-                            if not militaryCrate:FindFirstChild("Hitbox"):FindFirstChild("DecayEspTag") then
+                        if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then
+                            local militaryCrateHitbox = militaryCrate:FindFirstChild("Hitbox") 
+                            if not militaryCrateHitbox:FindFirstChild("DecayEspTag") then
                             createObjectEsp(militaryCrate)
                             end
                         end
@@ -426,15 +427,16 @@ EspTab:CreateToggle({
             end)
         elseif militaryCrateEspActive == false then 
             for _, militaryCrate in ipairs(workspace.LootSpawns:GetDescendants()) do 
-                if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then 
-                    if militaryCrate:FindFirstChild("Hitbox"):FindFirstChild("DecayEspTag") then 
+                if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then
+                    local militaryCrateHitbox = militaryCrate:FindFirstChild("Hitbox")
+                    if militaryCrateHitbox:FindFirstChild("DecayEspTag") then 
                     deleteObjectEsp(militaryCrate)
                     end
                 end
             end
         end
     end,
-})]]
+})
 
 for _, otherPlayer in ipairs(players:GetPlayers()) do
     setupPlayer(otherPlayer)
