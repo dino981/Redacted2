@@ -383,9 +383,11 @@ EspTab:CreateToggle({
             crateEspThread = task.spawn(function()
                 while crateEspActive do 
                     for _, crate in ipairs(workspace.LootSpawns:GetDescendants()) do 
-                        if crate.Name == "Crate" and crate:IsA("Model") then
-                            if not crate:FindFirstChild("Hitbox"):FindFirstChild("DecayEspTag") then
+                        if crate.Name == "Crate" and crate:IsA("Model") then 
+                            local crateHitbox = crate:FindFirstChild("Hitbox")
+                            if crateHitbox and not crateHitbox:FindFirstChild("DecayEspTag") then
                             createObjectEsp(crate)
+                            end
                         end
                     end
                     task.wait(1)
@@ -394,8 +396,9 @@ EspTab:CreateToggle({
         elseif crateEspActive == false then 
             for _, crate in ipairs(workspace.LootSpawns:GetDescendants()) do 
                 if crate.Name == "Crate" and crate:IsA("Model") then 
-                    if crate:FindFirstChild("Hitbox"):FindFirstChild("DecayEspTag") then
-                    deleteObjectEsp(crate)
+                    local crateHitbox = crate:FindFirstChild("Hitbox")
+                    if crateHitbox:FindFirstChild("DecayEspTag") then 
+                        deleteObjectEsp(crate)
                     end
                 end
             end
