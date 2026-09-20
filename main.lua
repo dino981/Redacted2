@@ -318,9 +318,13 @@ EspTab:CreateToggle({
     Callback = function(Value)
         playerEspActive = Value
         for _, otherPlayer in ipairs(players:GetPlayers()) do
-            if otherPlayer ~= player then 
-                if playerEspActive then 
+            if otherPlayer ~= player then
+                if playerEspActive then
+                    while playerEspActive do
+                    deleteEsp(otherPlayer)
                     createEsp(otherPlayer)
+                    wait(5)
+                    end
                 else 
                     deleteEsp(otherPlayer)
                 end
@@ -340,14 +344,3 @@ local function onRespawn()
 end
 
 player.CharacterAdded:Connect(onRespawn)
-
-players.PlayerAdded:Connect(function(newPlayer)
-    newPlayer.CharacterAdded:Connect(function(char)
-        if playerEspActive and newPlayer ~= player then
-            task.wait(0.5)
-            createEsp(char)
-        end
-    end)
-end)
-
-players.PlayerAdded:Connect(setupPlayer)
