@@ -226,10 +226,10 @@ HomeTab:CreateLabel("Display Name: " .. player.DisplayName)
 HomeTab:CreateLabel("Username: " .. player.Name)
 HomeTab:CreateLabel("User ID: " .. player.UserId)
 HomeTab:CreateLabel("Executor: " .. identifyexecutor() .. " " .. version())
-local playTimeLabel = HomeTab:CreateLabel(formatPlaytime(player.PlayTime))
+local playTimeLabel = HomeTab:CreateLabel(formatPlaytime(toNumber(player.PlayTime)))
 
 while true do 
-    playTimeLabel:Set(formatPlayTime(player.PlayTime))
+    playTimeLabel:Set(formatPlayTime(toNumber(player.PlayTime)))
     task.wait(10)
 end
 
