@@ -384,7 +384,8 @@ EspTab:CreateToggle({
             crateEspThread = task.spawn(function()
                 while crateEspActive do 
                     for _, crate in ipairs(workspace.LootSpawns:GetDescendants()) do 
-                        if crate.Name == "Crate" and crate:IsA("Model") then 
+                        if crate.Name == "Crate" and crate:IsA("Model") then
+                            if not crate:FindFirstChild("DecayEspTag") then
                             createObjectEsp(crate)
                         end
                     end
@@ -394,7 +395,9 @@ EspTab:CreateToggle({
         elseif crateEspActive == false then 
             for _, crate in ipairs(workspace.LootSpawns:GetDescendants()) do 
                 if crate.Name == "Crate" and crate:IsA("Model") then 
+                    if crate:FindFirstChild("DecayEspTag") then
                     deleteObjectEsp(crate)
+                    end
                 end
             end
         end
@@ -410,8 +413,10 @@ EspTab:CreateToggle({
             militaryCrateEspThread = task.spawn(function()
                 while militaryCrateEspActive do 
                     for _, militaryCrate in ipairs(workspace.LootSpawns:GetDescendants()) do 
-                        if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then 
+                        if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then  
+                            if not militaryCrate:FindFirstChild("DecayEspTag") then
                             createObjectEsp(militaryCrate)
+                            end
                         end
                     end
                     task.wait(1)
@@ -420,7 +425,9 @@ EspTab:CreateToggle({
         elseif militaryCrateEspActive == false then 
             for _, militaryCrate in ipairs(workspace.LootSpawns:GetDescendants()) do 
                 if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then 
+                    if militaryCrate:FindFirstChild("DecayEspTag") then 
                     deleteObjectEsp(militaryCrate)
+                    end
                 end
             end
         end
