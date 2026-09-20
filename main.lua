@@ -317,18 +317,28 @@ EspTab:CreateToggle({
     CurrentValue = false,
     Callback = function(Value)
         playerEspActive = Value
-        if playerEspActive == true then
+
+        if playerEspActive then
+            espThread = task.spawn(function()
+                while playerEspActive do
+                    for _, otherPlayer in ipairs(players:GetPlayers()) do
+                        if otherPlayer ~= player and otherPlayer.Character then
+                            local char = otherPlayer.Character
+                            if not char:FindFirstChild("DecayEspHighlight") then
+                                createEsp(otherPlayer)
+                            end
+                        end
+                    end
+                    task.wait(2)
+                end
+            end)
+        else
+            -- Clean up ESP when toggled off
             for _, otherPlayer in ipairs(players:GetPlayers()) do
                 if otherPlayer ~= player then
-                    while playerEspActive do
                     deleteEsp(otherPlayer)
-                    createEsp(otherPlayer)
-                    wait(5)
-                    end
                 end
             end
-        elseif playerEspActive == true then 
-            deleteEsp(otherPlayer)
         end
     end,
 })
