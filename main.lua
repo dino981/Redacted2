@@ -385,7 +385,7 @@ EspTab:CreateToggle({
                 while crateEspActive do 
                     for _, crate in ipairs(workspace.LootSpawns:GetDescendants()) do 
                         if crate.Name == "Crate" and crate:IsA("Model") then
-                            if not crate:FindFirstChild("DecayEspTag") then
+                            if not crate.Hitbox:FindFirstChild("DecayEspTag") then
                             createObjectEsp(crate)
                         end
                     end
@@ -395,7 +395,7 @@ EspTab:CreateToggle({
         elseif crateEspActive == false then 
             for _, crate in ipairs(workspace.LootSpawns:GetDescendants()) do 
                 if crate.Name == "Crate" and crate:IsA("Model") then 
-                    if crate:FindFirstChild("DecayEspTag") then
+                    if crate.Hitbox:FindFirstChild("DecayEspTag") then
                     deleteObjectEsp(crate)
                     end
                 end
@@ -414,7 +414,7 @@ EspTab:CreateToggle({
                 while militaryCrateEspActive do 
                     for _, militaryCrate in ipairs(workspace.LootSpawns:GetDescendants()) do 
                         if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then  
-                            if not militaryCrate:FindFirstChild("DecayEspTag") then
+                            if not militaryCrate.Hitbox:FindFirstChild("DecayEspTag") then
                             createObjectEsp(militaryCrate)
                             end
                         end
@@ -425,7 +425,7 @@ EspTab:CreateToggle({
         elseif militaryCrateEspActive == false then 
             for _, militaryCrate in ipairs(workspace.LootSpawns:GetDescendants()) do 
                 if militaryCrate.Name == "Military Crate" and militaryCrate:IsA("Model") then 
-                    if militaryCrate:FindFirstChild("DecayEspTag") then 
+                    if militaryCrate.Hitbox:FindFirstChild("DecayEspTag") then 
                     deleteObjectEsp(militaryCrate)
                     end
                 end
