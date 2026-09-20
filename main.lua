@@ -403,7 +403,7 @@ EspTab:CreateToggle({
     end,
 })
 
-EspTab:CreateToggle({
+--[[EspTab:CreateToggle({
     Name = "Military Crate Esp",
     CurrentValue = false,
     Callback = function(Value)
@@ -431,7 +431,7 @@ EspTab:CreateToggle({
             end
         end
     end,
-})
+})]]
 
 for _, otherPlayer in ipairs(players:GetPlayers()) do
     setupPlayer(otherPlayer)
