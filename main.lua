@@ -300,6 +300,7 @@ PlayerTab:CreateToggle {
         silentFootstepsActive = Value
         if silentFootstepsActive == true then
             crouch(true)
+            wait(0.5)
             player:FindFirstChild("IsCrouching").Value = false
         elseif silentFootstepsActive == false then 
             crouch(false)
@@ -310,6 +311,7 @@ PlayerTab:CreateToggle {
 player:FindFirstChild("IsCrouching"):GetPropertyChangedSignal("Value"):Connect(function()
     if player:FindFirstChild("IsCrouching").Value == false and silentFootstepsActive == true then 
          crouch(true)
+         wait(0.5)
          player:FindFirstChild("IsCrouching").Value = false
     end
 end)
