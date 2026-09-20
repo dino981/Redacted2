@@ -154,7 +154,7 @@ local function setupPlayer(targetPlayer)
     end
 end
 
-local function createObjectEsp(target)
+--[[local function createObjectEsp(target)
     local espBillboard = Instance.new("BillboardGui")
     espBillboard.Name = "DecayEspTag"
     espBillboard.AlwaysOnTop = true
@@ -183,7 +183,7 @@ local function deleteObjectEsp(target)
     if target:FindFirstChild("Hitbox") and target.Hitbox:FindFirstChild("DecayEspTag") then 
         target.Hitbox.DecayEspTag:Destroy()
     end
-end
+end]]
 --> FUNCTIONS <--
 
 -- 144803933568 Main Game
@@ -375,7 +375,7 @@ EspTab:CreateToggle({
     end,
 })
 
-EspTab:CreateToggle({
+--[[EspTab:CreateToggle({
     Name = "Crate Esp",
     CurrentValue = false,
     Callback = function(Value)
@@ -432,7 +432,7 @@ EspTab:CreateToggle({
             end
         end
     end,
-})
+})]]
 
 for _, otherPlayer in ipairs(players:GetPlayers()) do
     setupPlayer(otherPlayer)
