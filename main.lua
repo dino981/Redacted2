@@ -30,11 +30,11 @@ local airdropEspActive = false
 --> FUNCTIONS <--
 local function formatPlaytime(playtime)
     if playtime > 60 then 
-        return "Play Time: " .. playTime .. " seconds"
-    elseif playTime <= 60 then 
-        return "Play Time: " .. math.floor((playTime/60) * 10) / 10 .. " minutes"
+        return "Play Time: " .. playtime .. " seconds"
+    elseif playtime <= 60 then 
+        return "Play Time: " .. math.floor((playtime/60) * 10) / 10 .. " minutes"
     elseif playtime <= 3600 then 
-        return "Play Time: " .. math.floor((playTime/3600) * 10) / 10 .. " hour/s"
+        return "Play Time: " .. math.floor((playtime/3600) * 10) / 10 .. " hour/s"
     end
 end
 
