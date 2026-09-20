@@ -394,7 +394,7 @@ TargetTab:CreateInput({
 
 local viewToggle
 viewToggle = TargetTab:CreateToggle({
-    Name = "View"
+    Name = "View",
     CurrentValue = false,
     Callback = function(Value)
         viewingActive = Value
@@ -406,7 +406,7 @@ viewToggle = TargetTab:CreateToggle({
                 viewPart.Transparency = 1
                 viewPart.CanCollide = false
                 viewPart.Anchored = true
-                viewPart.Position = (TargetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 2, 2)).Position
+                viewPart.Position = (TargetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 5, 2)).Position
                 viewPart.Parent = workspace
 
                 camera.CameraSubject = viewPart
