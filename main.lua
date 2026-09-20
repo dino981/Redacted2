@@ -392,8 +392,9 @@ TargetTab:CreateInput({
    end,
 })
 
-TargetTab:CreateToggle({
-    Name = "View",
+local viewToggle
+viewToggle = TargetTab:CreateToggle({
+    Name = "View"
     CurrentValue = false,
     Callback = function(Value)
         viewingActive = Value
@@ -413,9 +414,17 @@ TargetTab:CreateToggle({
                 viewingConnection = runService.RenderStepped:Connect(function()
                     if not viewingActive or not viewPart then return end
                     if TargetPlayer and TargetPlayer.Character and TargetPlayer.Character:FindFirstChild("HumanoidRootPart") then 
-                        viewPart.Position = (TargetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 2, 2)).Position
+                        viewPart.Position = (TargetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 5, 2)).Position
                     end
                 end)
+            else 
+                Rayfield:Notify({
+                    Title = "View Error",
+                    Content = "Target could not be found! Target may be out of render distance.",
+                    Duration = 5,
+                    Image = "alert-triangle",
+                })
+                viewToggle:Set(false)
             end
         elseif viewingActive == false then
             if viewingConnection then 
