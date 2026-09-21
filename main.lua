@@ -16,6 +16,7 @@ local hrp = character.HumanoidRootPart
 
 --> LOCAL VARIABLES <--
 local silentFootstepsActive = false
+local fastHitActive = false
 local bv, bg
 local ghostPart
 local ghostViewSpeed = 1
@@ -65,9 +66,13 @@ end
 --end
 
 local function swingTool()
+    local viewmodel = camera:FindFirstChild("Viewmodel")
+    local toolModel = viewmodel and viewmodel:FindFirstChildWhichIsA("Model")
+    local toolName = (toolModel and toolModel.Name) or "Rock"
+
     local swingArgs = {
         [1] = camera.CFrame.LookVector,
-        [2] = camera:FindFirstChild("Viewmodel"):FindFirstChildWhichIsA("Model").Name or "Rock"
+        [2] = toolName
     }
 
     replicatedStorage.ToolSystem.RemoteEvents.Swing:FireServer(unpack(swingArgs))
@@ -377,6 +382,21 @@ player:FindFirstChild("IsCrouching"):GetPropertyChangedSignal("Value"):Connect(f
          player:FindFirstChild("IsCrouching").Value = false
     end
 end)
+
+PlayerTab:CreateToggle{
+    Name = "Fast Hit",
+    CurrentValue = false,
+    Callback = function(Value)
+        fastHitActive = Value
+        if fastHitActive == true then 
+            fastHitThread = task.spawn(function()
+                while fastHitActive do 
+                    swingTool()
+                end
+            end)
+        end
+    end
+}
 
 PlayerTab:CreateToggle{
     Name = "Display My Bases",
