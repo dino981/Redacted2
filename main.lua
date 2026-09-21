@@ -264,7 +264,7 @@ local function createOwnBaseEsp(target)
     espNameTag.Parent = espBillboard
 end
 
-local function deleteBaseEsp(target)
+local function deleteOwnBaseEsp(target)
     if target:FindFirstChild("Hitbox") and target.Hitbox:FindFirstChild("DecayEspTag") then 
         target.Hitbox.DecayEspTag:Destroy()
     end
@@ -391,7 +391,7 @@ PlayerTab:CreateToggle{
                             for _, authedPlayers in ipairs(authorizedPlayers:GetChildren()) do 
                                 if authedPlayers.Value == player.UserId then
                                     if build:FindFirstChild("Hitbox") and not build:FindFirstChild("Hitbox"):FindFirstChild("DecayEspTag") then
-                                        createBaseEsp(build)
+                                        createOwnBaseEsp(build)
                                     end
                                 break
                                 end
@@ -409,7 +409,7 @@ PlayerTab:CreateToggle{
                             for _, authedPlayers in ipairs(authorizedPlayers:GetChildren()) do 
                                 if authedPlayers.Value == player.UserId then
                                     if build:FindFirstChild("Hitbox") and build:FindFirstChild("Hitbox"):FindFirstChild("DecayEspTag") then
-                                        deleteBaseEsp(build)
+                                        deleteOwnBaseEsp(build)
                                     end
                                 break
                                 end
