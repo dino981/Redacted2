@@ -226,7 +226,7 @@ local function createBaseEsp(target)
     espNameTag.ZIndex = 10
     espNameTag.Font = Enum.Font.SourceSansBold
     espNameTag.TextSize = 14
-    espNameTag.Text = TargetPlayer.Name .. "'s Base"
+    espNameTag.Text = (TargetPlayer and TargetPlayer.Name .. "'s Base") or ""
     espNameTag.TextColor3 = Color3.fromRGB(255, 0, 0)
     espNameTag.TextStrokeTransparency = 0
     espNameTag.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
@@ -581,7 +581,7 @@ viewToggle = TargetTab:CreateToggle({
 })
 
 TargetTab:CreateToggle({
-    Name = "Locate Bases",
+    Name = "Locate Target Bases",
     CurrentValue = false,
     Callback = function(Value)
         if Value == true then
