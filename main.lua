@@ -398,7 +398,7 @@ PlayerTab:CreateToggle{
                 end
             end)
         end
-    end
+    end,
 }
 
 PlayerTab:CreateToggle{
