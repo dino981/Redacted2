@@ -390,8 +390,11 @@ PlayerTab:CreateToggle{
         fastHitActive = Value
         if fastHitActive == true then 
             fastHitThread = task.spawn(function()
-                while fastHitActive do 
+                while fastHitActive do
+                    if camera:FindFirstChild("Viewmodel") and camera:FindFirstChild("Viewmodel"):FindFirstChildWhichIsA("Model") or camera:FindFirstChild("Rock") then
                     swingTool()
+                    end
+                    task.wait(0.1)
                 end
             end)
         end
