@@ -226,8 +226,39 @@ local function createBaseEsp(target)
     espNameTag.ZIndex = 10
     espNameTag.Font = Enum.Font.SourceSansBold
     espNameTag.TextSize = 14
-    espNameTag.Text = target.Name .. "'s Base"
+    espNameTag.Text = TargetPlayer.Name .. "'s Base"
     espNameTag.TextColor3 = Color3.fromRGB(255, 0, 0)
+    espNameTag.TextStrokeTransparency = 0
+    espNameTag.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    espNameTag.Parent = espBillboard
+end
+
+local function deleteBaseEsp(target)
+    if target:FindFirstChild("Hitbox") and target.Hitbox:FindFirstChild("DecayEspTag") then 
+        target.Hitbox.DecayEspTag:Destroy()
+    end
+end
+
+local function createOwnBaseEsp(target)
+    local espBillboard = Instance.new("BillboardGui")
+    espBillboard.Name = "DecayEspTag"
+    espBillboard.AlwaysOnTop = true
+    espBillboard.MaxDistance = math.huge
+    espBillboard.Size = UDim2.new(0, 150, 0, 30)
+    espBillboard.StudsOffset = Vector3.new(0, 2.5, 0)
+    espBillboard.Adornee = target:FindFirstChild("Hitbox")
+    espBillboard.Parent = target:FindFirstChild("Hitbox")
+
+    local espNameTag = Instance.new("TextLabel")
+    espNameTag.BackgroundTransparency = 1
+    espNameTag.Size = UDim2.new(1, 0, 1, 0)
+    espNameTag.Position = UDim2.new(0, 0, 0, 0)
+    espNameTag.TextTransparency = 0
+    espNameTag.ZIndex = 10
+    espNameTag.Font = Enum.Font.SourceSansBold
+    espNameTag.TextSize = 14
+    espNameTag.Text = "My Base"
+    espNameTag.TextColor3 = Color3.fromRGB(0, 255, 0)
     espNameTag.TextStrokeTransparency = 0
     espNameTag.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     espNameTag.Parent = espBillboard
@@ -346,6 +377,50 @@ player:FindFirstChild("IsCrouching"):GetPropertyChangedSignal("Value"):Connect(f
          player:FindFirstChild("IsCrouching").Value = false
     end
 end)
+
+PlayerTab:CreateToggle{
+    Name = "Display My Bases",
+    CurrentValue = false,
+    Callback = function(Value)
+        if Value == true then 
+            if player and player.UserId then 
+                for _, build in ipairs(workspace.PlayerBuiltStructures.Deployables:GetChildren()) do 
+                    if build.Name == "Base Claim" then 
+                        local authorizedPlayers = build:FindFirstChild("AuthorizedPlayers")
+                        if authorizedPlayers then 
+                            for _, authedPlayers in ipairs(authorizedPlayers:GetChildren()) do 
+                                if authedPlayers.Value == player.UserId then
+                                    if build:FindFirstChild("Hitbox") and not build:FindFirstChild("Hitbox"):FindFirstChild("DecayEspTag") then
+                                        createBaseEsp(build)
+                                    end
+                                break
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        elseif Value == false then 
+            if player and player.UserId then 
+                for _, build in ipairs(workspace.PlayerBuiltStructures.Deployables:GetChildren()) do 
+                    if build.Name == "Base Claim" then 
+                        local authorizedPlayers = build:FindFirstChild("AuthorizedPlayers")
+                        if authorizedPlayers then 
+                            for _, authedPlayers in ipairs(authorizedPlayers:GetChildren()) do 
+                                if authedPlayers.Value == player.UserId then
+                                    if build:FindFirstChild("Hitbox") and build:FindFirstChild("Hitbox"):FindFirstChild("DecayEspTag") then
+                                        deleteBaseEsp(build)
+                                    end
+                                break
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end,
+}
 
 PlayerTab:CreateSlider {
     Name = "Ghost View Speed",
